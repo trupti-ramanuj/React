@@ -9,7 +9,7 @@ function App() {
   const [to,setTo]=useState("inr");
   const [con,setCon]=useState(0);
 
-  const [currencyInfo]=useCurrencyinfo(from)
+  const currencyInfo=useCurrencyinfo(from)
 
   const options= Object.keys(currencyInfo);
 
@@ -45,13 +45,14 @@ const convert = () => {
         </div>
         <div className='w-full mt-1 mb-4'>
           <InputBox label="To"
-        amount={convert} 
+        amount={con} 
         currencyOptions={options}
         onCurrencyChange={(currency) => setTo(currency)} 
         selectCurrency={from} amountDisable/>
         </div>
         <button type='submit' className='w-full bg-blue-600 text-white px-4 py-3  rounded-lg'>Convert {from.toUpperCase()}to{to.toUpperCase()}</button>
-        </form></div>
+        </form>
+        </div>
   </div>
 </div>
       
