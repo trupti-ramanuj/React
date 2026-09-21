@@ -2,7 +2,7 @@ import React, { createContext } from 'react'
 
 export const data = createContext()
 
-function UserContaxt({children}) {
+function UserContext({children}) {
 let username="Ramanuj"
 
   return (
@@ -15,4 +15,4 @@ let username="Ramanuj"
   )
 }
 
-export default UserContaxt
+export default UserContext

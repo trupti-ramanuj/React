@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { data } from "./contaxt/UserContaxt"
+import { data } from "./context/UserContext"
 import Card from "./Card"
 
 

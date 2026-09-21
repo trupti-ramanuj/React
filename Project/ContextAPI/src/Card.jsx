@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { ek } from './contaxt/story'
+import { ek } from './context/Story'
 
 function Card() {
    let d = useContext(ek)
