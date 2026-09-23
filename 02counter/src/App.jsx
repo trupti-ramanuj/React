@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+
 import './App.css'
 
 function App() {
@@ -14,7 +12,7 @@ function App() {
   }
     const removeValue=()=>{
       if(counter > 0){
-    setCounter(counter - 1);
+       setCounter(counter - 1);
       }
   }
   return (
