@@ -6,7 +6,7 @@ import './App.css'
 import Useref from './UseRef/Useref'
 import Stopwatch from './UseRef/Stopwatch'
 import Useid from './UseId/Useid'
-
+import Form from './two-way-binding/Form'
 function App() {
   // const [a, setA] = useState(20)
 
@@ -29,6 +29,7 @@ const [state, dispatch] = useReducer(reducer, { age: 20});
        <Useref />
        <Stopwatch/><br />
        <Useid/>
+       <Form />
      </>
     );
 }
