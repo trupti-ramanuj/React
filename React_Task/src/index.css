@@ -1,0 +1,23 @@
+body{
+  font-family: Arial,sans-serif;
+  padding: 30px;
+}
+.container{
+  max-width: 900px;
+  margin: auto;
+}
+form{
+  margin-bottom: 30px;
+}
+input{
+  display: block;
+  width: 300px;
+  padding: 10px;
+  margin: 8px 0;
+}
+
+.user-card{
+  border:1px solid #ccc;
+  padding: 15px;
+  margin: 10px 0;
+}
