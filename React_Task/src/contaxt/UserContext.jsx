@@ -3,7 +3,7 @@ import { createContext,useReducer} from "react";
 export const UserContext = createContext();
 
 const initialState ={
-    users: "Failed to load users",
+    users: [],
     loading:false,
     error:null,
 };
@@ -32,6 +32,7 @@ const userReducer = (state,action)=>{
             return{
                 ...state,
                 users:[...state.users,action.payload],
+
             };
         case "UPDATE_USER":
             return{
@@ -85,7 +86,7 @@ export const UserProvider = ({children})=>{
         try{
             const token = localStorage.getItem("token");
     
-            const res = await fetch('https://dummyjson.com/users/add',
+            const res = await fetch('https://dummyjson.com/users',
                 {
                     method : "POST",
                     headers:{
