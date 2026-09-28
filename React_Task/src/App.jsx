@@ -26,10 +26,10 @@ const App = ()=> {
     return <Login onLogin={handleLogin}/>;
   }
   return (
-    <div className='container'>
-      <h1>User Management</h1>
+    <div className='container p-10 '>
+      <h1 className='text-2xl'>User Management</h1>
 
-        <button onClick={()=>{
+        <button className='btn bg-red-400 p-2 rounded text-white' onClick={()=>{
           localStorage.removeItem('token') 
         setLogin(false)
         }}>Logout

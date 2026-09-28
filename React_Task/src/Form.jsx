@@ -15,10 +15,10 @@ const Form =({edit,setEdit})=>{
     useEffect(()=>{
         if(edit){
             setForm({
-                name: edit.name,
-                email:edit.email,
-                username:edit.username,
-                phone:edit.phone,
+                name: edit?.name,
+                email:edit?.email,
+                username:edit?.username,
+                phone:edit?.phone,
             });
         }
     },[edit]);
@@ -33,19 +33,18 @@ const Form =({edit,setEdit})=>{
         e.preventDefault();
 
         if(
-            !form.name ||
+            
             !form.email ||
             !form.username ||
             !form.phone
         ){
             alert("All fields are required");
             return;
-
         }
         if(edit){
-            await update(edit.id,{
+            await update(edit?.id,{
                 ...form,
-                id:edit.id,
+                id:edit?.id,
             });
             setEdit(null);
         }else{
@@ -59,16 +58,16 @@ const Form =({edit,setEdit})=>{
         });
     }
     return(
-        <form onSubmit={handleSubmit}>
-            <h2>{edit?"Edit":"Add"}</h2>
-            <input name="name" placeholder="Name" value={form.name} onChange={handleChange}/>
-            <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-            <input name="username" placeholder="Username" value={form.username} onChange={handleChange} />
-            <input name="phone" placeholder="phone" value={form.phone} onChange={handleChange}/>
+        <form className="bg-yellow-200 m-5 p-4  " onSubmit={handleSubmit}>
+            <h2 className="text-2xl">{edit?"Edit":"Add"}</h2>
+            <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="name" placeholder="Name" value={form.username} onChange={handleChange}/>
+            <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="email" placeholder="Email" value={form.email} onChange={handleChange} />
+            <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="username" placeholder="Username" value={form.username} onChange={handleChange} />
+            <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="phone" placeholder="phone" value={form.phone} onChange={handleChange}/>
 
-            <button type="submit">{edit?"Update":"Add"}</button>
+            <button className="btn bg-blue-300 text-white p-2 m-2 rounded" type="submit">{edit?"Update":"Add"}</button>
 
-            {edit && ( <button type="button" onClick={()=>setEdit(null)}> Cancel</button>)}
+            {edit && ( <button className="btn bg-red-300 text-white p-2 rounded" type="submit" onClick={()=>setEdit(null)}> Cancel</button>)}
 
         </form>
     )

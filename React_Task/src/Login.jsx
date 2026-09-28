@@ -25,20 +25,22 @@ import React, { useState } from 'react'
 
   return (
  
-      <div className="Login">
-        <h2>Login</h2>
+      <div className="p-15 m-10">
+        <h2 className='text-2xl ml-20 mt-20  text-slate-700 font-bold'>Login</h2>
 
-        <form onSubmit={handleSubmit}>
+        <form className='m-5 mt-0 w-full p-10 m-7rounded-md ' onSubmit={handleSubmit} >
+         
+          <input className="m-3 px-10  py-2 border border-slate-300 text-sm rounded-md outline-none" type="email" placeholder='Enter email' value={email} onChange={(e)=> setEmail(e.target.value)} /> <br />
 
-          <input type="email" placeholder='Enter email' value={email} onChange={(e)=> setEmail(e.target.value)} />
-
-          <input type="text" placeholder='Enter Username' value={username} onChange={(e)=> setUsername(e.target.value)} />
+          <input className="m-3  px-10 py-2 border border-slate-300 text-sm rounded-md outline-none" type="text" placeholder='Enter Username' value={username} onChange={(e)=> setUsername(e.target.value)} /> <br />
 
 
-           <input type="password" placeholder='Enter password' value={password} onChange={(e)=> setPassword(e.target.value)} />
+           <input className="m-3 px-10 py-2 border border-slate-300 text-sm rounded-md outline-none" type="password" placeholder='Enter password' value={password} onChange={(e)=> setPassword(e.target.value)} /> <br />
 
-            {error && <p>{error}</p>}
-            <button type='submit'>Login</button>
+
+            {error && <p className='text-red-700'>{error}</p>}
+            <button className="btn bg-blue-300 text-white p-2 m-2 rounded w-30px"  type='submit'>Login</button>
+          
         </form>
       </div>
 

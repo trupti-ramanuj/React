@@ -13,11 +13,11 @@ const List = ({setEdit})=>{
         return <h3>No user</h3>
     }
     return(
-        <div>
-            <h2>User List</h2>
+        <div className=" p-15 m-10">
+            <h2 className="text-2xl">User List</h2>
             {users?.map((user)=>(
-                <div className="user-card" key={user?.id}>
-                    <h3>{user.name}</h3>
+                <div className="border border-black  m-5 p-5" key={user?.id}>
+                    <h3>{user?.name}</h3>
 
                     <p>
                         <b>Email:</b>{user?.email}
@@ -30,8 +30,8 @@ const List = ({setEdit})=>{
 
                     </p>
 
-                    <button onClick={()=>setEdit(user)}>Edit</button>
-                    <button onClick={()=>deleteUser(user?.id)}>Delete</button>
+                    <button className="btn bg-blue-300 text-white p-2 m-2 rounded"  onClick={()=>setEdit(user)}>Edit</button>
+                    <button className="btn bg-red-300 text-white p-2 rounded" onClick={()=>deleteUser(user.id)}>Delete</button>
                 </div>
             ))}
         </div>

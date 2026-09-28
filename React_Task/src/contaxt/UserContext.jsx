@@ -1,16 +1,16 @@
-import { createContext, useReducer } from "react";
+import { createContext,useReducer } from "react";
 
 export const UserContext = createContext();
 
 const initialState = {
-  users: [],
-  loading: false,
-  error: null,
+  users:[],
+  loading:false,
+  error:null,
 };
 
 const userReducer = (state, action) => {
   switch (action.type) {
-    case "LOADING_USER":
+    case "LOADING":
       return {
         ...state,
         loading: true,
@@ -28,22 +28,22 @@ const userReducer = (state, action) => {
         loading: false,
         error: action.payload,
       };
-    case "ADD_USER":
+    case "ADD":
       return {
         ...state,
         users: [...state.users, action.payload],
       };
-    case "UPDATE_USER":
+    case "UPDATE":
       return {
         ...state,
         users: state.users.map((val) =>
-          val.id === action.payload.id ? val : action.payload,
+          val.id !== action.payload.id ? val : action.payload,
         ),
       };
-    case "DELETE_USER":
+    case "DELETE":
       return {
         ...state,
-        users: state.users.filter((val) => val.id === action.payload),
+        users: state.users.filter((val) => val.id !== action.payload),
       };
     default:
       return state;
@@ -72,7 +72,7 @@ export const UserProvider = ({ children }) => {
       const newUser = await res.json();
 
       dispatch({
-        type: "LOGIN_USER",
+        type: "LOADING",
         payload: newUser,
       });
     } catch (error) {
@@ -84,7 +84,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const getUser = async () => {
-    dispatch({ type: "LOADING_USER" });
+    dispatch({ type: "LOADING" });
 
     try {
       const token = localStorage.getItem("token");
@@ -130,7 +130,7 @@ export const UserProvider = ({ children }) => {
       const newUser = await res.json();
 
       dispatch({
-        type: "ADD_USER",
+        type: "ADD",
         payload: newUser,
       });
     } catch (error) {
@@ -157,7 +157,7 @@ export const UserProvider = ({ children }) => {
       }
       const data = await res.json();
       dispatch({
-        type: "UPDATE_USER",
+        type: "UPDATE",
         payload: data,
       });
     } catch (error) {
@@ -181,7 +181,7 @@ export const UserProvider = ({ children }) => {
         throw new Error("Failed to delete user");
       }
       dispatch({
-        type: "DELETE_USER",
+        type: "DELETE",
         payload: id,
       });
     } catch (error) {
