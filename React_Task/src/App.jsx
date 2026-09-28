@@ -26,17 +26,20 @@ const App = ()=> {
     return <Login onLogin={handleLogin}/>;
   }
   return (
-    <div className='container p-10 '>
-      <h1 className='text-2xl'>User Management</h1>
+     <div className='h-screen lg:flex  bg-black text-white '>
+       <div className='lg:w-1/2 bg-black/30'>
+       <h1 className='text-4xl font-bold'>User Management</h1>
 
-        <button className='btn bg-red-400 p-2 rounded text-white' onClick={()=>{
+      <button className='px-5 py-2 m-2  h-10 cursor-pointer active:scale-95 bg-red-500  text-xs rounded font-bold text-white' onClick={()=>{
           localStorage.removeItem('token') 
         setLogin(false)
         }}>Logout
-        </button>
+        </button> 
   
       <Form edit={edit} setEdit={setEdit} />
-      <List setEdit={setEdit}/>
+        </div>
+        <div className='lg:w-1/2'>
+      <List setEdit={setEdit}/> </div>
     </div>
   )
 }

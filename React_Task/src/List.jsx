@@ -13,27 +13,29 @@ const List = ({setEdit})=>{
         return <h3>No user</h3>
     }
     return(
-        <div className=" p-15 m-10">
-            <h2 className="text-2xl">User List</h2>
+        <div className="h-[95%]  overflow-auto ">
+            <h2 className='text-4xl font-bold'>User List</h2>
+            <div  className=' flex flex-wrap items-start justify-start gap-2 mt-6'>
             {users?.map((user)=>(
-                <div className="border border-black  m-5 p-5" key={user?.id}>
-                    <h3>{user?.name}</h3>
+                <div key={user} className=" flex justify-between flex-col items-start relative h-55 w-50 rounded-xl text-black pt-9 pb-4 px-4 bg-white">
+                <div className="w-50 h-55 border border-black  m-2 p-2" key={user?.id}>
+                    <h3 className='leading-tight text-lg font-bold'>{user?.name}</h3>
 
-                    <p>
+                    <p className='mt-1 leading-tight text-xs font-semibold text-gray-600'>
                         <b>Email:</b>{user?.email}
                     </p>
-                    <p>
+                    <p className='mt-2 leading-tight text-xs font-semibold text-gray-600'>
                         <b>Username:</b>{user?.username}
                     </p>
-                    <p>
+                    <p className='mt-2 leading-tight text-xs font-semibold text-gray-600'>
                         <b>Phone:</b>{user?.phone}
-
                     </p>
 
-                    <button className="btn bg-blue-300 text-white p-2 m-2 rounded"  onClick={()=>setEdit(user)}>Edit</button>
-                    <button className="btn bg-red-300 text-white p-2 rounded" onClick={()=>deleteUser(user.id)}>Delete</button>
+                    <button  className='w-full cursor-pointer active:scale-95 bg-blue-500 py-1 text-xs rounded font-bold text-white'  onClick={()=>setEdit(user)}>Edit</button>
+                    <button  className='w-full cursor-pointer active:scale-95 bg-red-500 py-1 text-xs rounded font-bold text-white' onClick={()=>deleteUser(user.id)}>Delete</button>
                 </div>
-            ))}
+                </div>
+            ))}</div>
         </div>
     )
 }
