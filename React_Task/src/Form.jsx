@@ -58,14 +58,14 @@ const Form =({edit,setEdit})=>{
         });
     }
     return(
-        <form className="bg-yellow-200 m-5 p-4  " onSubmit={handleSubmit}>
+        <form className="bg-blue-300 m-5 p-10  " onSubmit={handleSubmit}>
             <h2 className="text-2xl">{edit?"Edit":"Add"}</h2>
             <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="name" placeholder="Name" value={form.username} onChange={handleChange}/>
-            <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-            <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="username" placeholder="Username" value={form.username} onChange={handleChange} />
-            <input className="mt-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="phone" placeholder="phone" value={form.phone} onChange={handleChange}/>
+            <input className="m-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="email" placeholder="Email" value={form.email} onChange={handleChange} />
+            <input className="m-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="username" placeholder="Username" value={form.username} onChange={handleChange} />
+            <input className="m-1 px-3 py-2 border border-slate-300 text-sm rounded-md outline-none" name="phone" placeholder="phone" value={form.phone} onChange={handleChange}/>
 
-            <button className="btn bg-blue-300 text-white p-2 m-2 rounded" type="submit">{edit?"Update":"Add"}</button>
+            <button className="btn bg-yellow-300 text-white p-2 m-2 rounded" type="submit">{edit?"Update":"Add"}</button>
 
             {edit && ( <button className="btn bg-red-300 text-white p-2 rounded" type="submit" onClick={()=>setEdit(null)}> Cancel</button>)}
 
