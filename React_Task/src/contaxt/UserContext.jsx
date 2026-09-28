@@ -86,7 +86,7 @@ export const UserProvider = ({children})=>{
         try{
             const token = localStorage.getItem("token");
     
-            const res = await fetch('https://dummyjson.com/users',
+            const res = await fetch('https://dummyjson.com/users/add',
                 {
                     method : "POST",
                     headers:{
