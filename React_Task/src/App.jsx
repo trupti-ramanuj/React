@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect } from 'react';
 import Form from "./Form";
 import List from "./List";
 import Login from "./Login";
@@ -29,7 +29,8 @@ const App = ()=> {
     <div className='container'>
       <h1>User Management</h1>
 
-        <button onClick={()=>{localStorage.removeItem('token') 
+        <button onClick={()=>{
+          localStorage.removeItem('token') 
         setLogin(false)
         }}>Logout
         </button>
