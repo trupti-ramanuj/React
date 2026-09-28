@@ -3,7 +3,7 @@ import { createContext,useReducer} from "react";
 export const UserContext = createContext();
 
 const initialState ={
-    users: [],
+    users: "Failed to load users",
     loading:false,
     error:null,
 };
@@ -26,7 +26,7 @@ const userReducer = (state,action)=>{
             return{
                 ...state,
                 loading:false,
-                users:action.payload,
+                error:action.payload,
             };
         case "ADD_USER":
             return{
@@ -72,7 +72,7 @@ export const UserProvider = ({children})=>{
 
             dispatch({
                 type:"SUCCESS",
-                payload:data.user,
+                payload:data.users,
             });
         }catch(error){
           dispatch({
@@ -85,12 +85,12 @@ export const UserProvider = ({children})=>{
         try{
             const token = localStorage.getItem("token");
     
-            const res = await fetch('https://dummyjson.com/users',
+            const res = await fetch('https://dummyjson.com/users/add',
                 {
                     method : "POST",
                     headers:{
                         "Content-Type":"application/json",
-                        Athorization:`${token}`,
+                        Authorization:`${token}`,
                     },
                     body:JSON.stringify(user),
                 }
@@ -107,7 +107,7 @@ export const UserProvider = ({children})=>{
                 });
             }catch(error){
               dispatch({
-                type:"Error",
+                type:"ERROR",
                 payload: error.message,
               });
             } 

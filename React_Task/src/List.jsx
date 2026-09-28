@@ -9,7 +9,7 @@ const List = ({setEdit})=>{
     if(error){
         return <h3>{error}</h3>
     }
-    if(users.length === 0){
+    if(users?.length === 0){
         return <h3>No user</h3>
     }
     return(
