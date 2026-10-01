@@ -7,7 +7,7 @@ function Pagination({currentPage, totalPages, onPageChange}){
   );
 
   return (
-    <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row">
+    <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-slate-500 bg-white p-4 sm:flex-row">
 
       <button
         type="button"
@@ -15,7 +15,7 @@ function Pagination({currentPage, totalPages, onPageChange}){
         onClick={() =>
           onPageChange(currentPage - 1)
         }
-        className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-40 sm:w-auto"
+        className="w-full rounded-xl border border-slate-500 px-4 py-2.5 text-sm font-semibold text-slate-600 sm:w-auto"
       >
         ← Previous
       </button>
@@ -26,12 +26,11 @@ function Pagination({currentPage, totalPages, onPageChange}){
             key={page}
             type="button"
             onClick={() => onPageChange(page)}
-            className={`h-10 min-w-10 rounded-xl px-3 text-sm font-semibold transition ${
+            className={`h-10 min-w-10 rounded-xl px-3 text-sm font-semibold ${
               currentPage === page
-                ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                : "border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
-            }`}
-          >
+                ? "bg-blue-600 text-white "
+                : "border border-slate-500 bg-white text-slate-600"
+            }`}>
             {page}
           </button>
         ))}
@@ -42,8 +41,7 @@ function Pagination({currentPage, totalPages, onPageChange}){
         onClick={() =>
           onPageChange(currentPage + 1)
         }
-        className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-40 sm:w-auto"
-      >
+        className="w-full rounded-xl border border-slate-500 px-4 py-2.5 text-sm font-semibold text-slate-600  sm:w-auto">
         Next →
       </button>
       </div>

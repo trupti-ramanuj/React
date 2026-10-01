@@ -17,23 +17,40 @@ function App() {
     update,
     remove,
     logout,
-    onAdd,
   } = useUsers();
 
   const [edit, setEdit] = useState(null);
 
+  const [showForm, setShowForm] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const [deleteId, setDeleteId] = useState(null);
+  const [search, setSearch] = useState("");
 
-  const totalPages = Math.max(1,Math.ceil(users.length / USERS_PER_PAGE)
+  const filteredUsers = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) return users;
+
+    return users.filter((user) => {
+      const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+      return (
+        String(user.id).toLowerCase().includes(query) ||
+        fullName.toLowerCase().includes(query)
+      );
+    });
+  }, [users, search]);
+
+  const totalPages = Math.max(1,Math.ceil(filteredUsers.length / USERS_PER_PAGE)
   );
 
   const visibleUsers = useMemo(() => {
     const start = (currentPage - 1) * USERS_PER_PAGE;
 
-    return users.slice(start, start + USERS_PER_PAGE);
-  }, [users, currentPage]);
+    return filteredUsers.slice(start, start + USERS_PER_PAGE);
+  }, [filteredUsers, currentPage]);
 
   useEffect(() => {
     if (currentPage > totalPages) {
@@ -49,7 +66,10 @@ function App() {
       );
 
       if (result.success) {
+       
         setEdit(null);
+        setShowForm(false);
+       
       }
 
       return;
@@ -59,7 +79,9 @@ function App() {
 
     if (result.success) {
       console.log(result.data, "new user");
+
       setCurrentPage(1);
+      setShowForm(false);
     }
   }
 
@@ -74,6 +96,7 @@ function App() {
 
   function handleCancelEdit() {
     setEdit(null);
+    setShowForm(false);
   }
 
   async function handleDelete(user) {
@@ -103,35 +126,44 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-blue-50">
 
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-sm backdrop-blur">
         <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:block">
+            <div className=" sm:block">
               <h1 className="text-lg font-bold text-slate-900">
                 User Management
               </h1>
             </div>
           </div>
-
+     
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Search User..."
+              aria-label="Search users by ID or name"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none  sm:w-64"/>
+         
           <button
             type="button"
             onClick={logout}
-            className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-          >
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600">
             Logout
           </button>
-
         </div>
       </header>
 
 
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-
-        <Form edit={edit} onCancel={handleCancelEdit} onSubmit={handleSubmit}     onAdd={onAdd} />
-
+        {(edit || showForm) && (
+          <Form edit={edit} onCancel={handleCancelEdit} onSubmit={handleSubmit} />
+        )}
         <section>
 
           <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -141,37 +173,43 @@ function App() {
 
                 <h2 className="text-2xl font-bold text-slate-900">Users</h2>
 
-                <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
-                  {users.length}
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-blue-700">
+                  {filteredUsers.length}
                 </span>
 
               </div>
 
             </div>
 
-            {!loading && users.length > 0 && (
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-500 shadow-sm">
-                Showing{" "}
-                <strong className="text-slate-800">
-                  {visibleUsers.length}
-                </strong>{" "}
-                of{" "}
-                <strong className="text-slate-800">
-                  {users.length}
-                </strong>
-              </div>
+            {!edit && (
+              <button
+                type="button"
+                onClick={() => setShowForm((open) => !open)}
+                className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white "
+              >
+                {showForm ? "Close Form" : "Add User"}
+              </button>
             )}
 
+       
           </div>
 
-          <List
-            users={visibleUsers}
-            loading={loading}
-            error={error}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            deletingId={deleteId}
-          />
+          {!loading && !error && filteredUsers.length === 0 ? (
+            <p className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+              {users.length === 0
+                ? "No users found."
+                : "No users match y"}
+            </p>
+          ) : (
+            <List
+              users={visibleUsers}
+              loading={loading}
+              error={error}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              deletingId={deleteId}
+            />
+          )}
 
           {!loading &&
             !error &&

@@ -133,8 +133,8 @@ function Form({
 
   const inputClass = (field) =>
     `w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition ${
-      errors[field] ? "border-red-400 bg-red-50 focus:ring-4 focus:ring-red-100"
-        : "border-slate-300 bg-white focus:border-blue-500 "
+      errors[field] ? "border-red-400 bg-red-50 focus:ring-4 "
+        : "border-slate-300 "
     }`;
 
   return (
@@ -153,9 +153,9 @@ function Form({
           
         </div>
 
-        {edit && (
-          <button type="button" onClick={onCancel}  disabled={loading}  className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-600transition hover:bg-slate-50">
-            Cancel Edit
+        {onCancel && (
+          <button type="button" onClick={onCancel}  disabled={loading}  className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-600">
+            {edit ? "Cancel Edit" : "Cancel"}
           </button>
         )}
       </div>
@@ -271,7 +271,7 @@ function Form({
               type="button"
               onClick={onCancel}
               disabled={loading}
-              className="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+              className="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 0">
               Cancel
             </button>
           )}
@@ -279,10 +279,8 @@ function Form({
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 disabled:opacity-60">
-            {loading && (
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-            )}
+            className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white">
+           
 
             {loading ? "Saving..."  : edit ? "Update"  : "Add"}
           </button>

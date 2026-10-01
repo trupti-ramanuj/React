@@ -12,7 +12,7 @@ import {
 export const UserContext = createContext();
 
 const initialState = {
- users: [],
+  users: [],
   loading: false,
   error: "",
   token: localStorage.getItem("accessToken"),
@@ -133,9 +133,7 @@ export const UserProvider = ({ children }) => {
         payload: data,
       });
 
-      return {
-        success: true,
-      };
+      return {   success: true };
     } catch (error) {
       dispatch({
         type: "LOGIN_ERROR",
@@ -209,7 +207,7 @@ export const UserProvider = ({ children }) => {
       const created = await createApi(user);
 
       dispatch({
-        type: "ADD_USER",
+        type: "ADD",
         payload: {
           ...user,
           ...created,

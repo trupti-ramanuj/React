@@ -10,9 +10,9 @@ function Card({
     }`.trim();
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition  hover:border-blue-200 hover:shadow-xl hover:shadow-slate-200/60">
+    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white">
 
-      <div className="h-12 bg-gradient-to-r from-blue-600 to-indigo-600" />
+      <div className="h-10 bg-blue-600" />
 
       <div className="px-5 pb-5">
 
@@ -34,11 +34,11 @@ function Card({
            
 
             <div className="min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
+              <p className="text-[10px] font-bold uppercase text-slate-500">
                 Email
               </p>
 
-              <p className="truncate text-sm text-slate-500">
+              <p className="text-sm text-slate-500">
                 {user.email || "—"}
               </p>
             </div>
@@ -47,11 +47,11 @@ function Card({
           <div className="flex items-center gap-3">
           
             <div className="min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
+              <p className="text-[10px] font-bold uppercase text-slate-500">
                 Phone
               </p>
 
-              <p className="truncate text-sm text-slate-500">
+              <p className=" text-sm text-slate-500">
                 {user.phone || "—"}
               </p>
             </div>
@@ -61,7 +61,7 @@ function Card({
            
 
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
+              <p className="text-[10px] font-bold uppercase text-slate-500">
                 Age / ID
               </p>
 
@@ -73,23 +73,23 @@ function Card({
         </div>
 
     
-        <div className="mt-5 grid grid-cols-2 gap-2 border-t border-slate-100 pt-5">
-          <button type="button"  onClick={() => onEdit(user)}  disabled={deleting}  className="rounded-xl bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-600transition hover:bg-blue-100 ">
+        <div className="mt-5 grid grid-cols-2 gap-2 border-t border-slate-500 pt-5">
+          <button type="button"  onClick={() => onEdit(user)}  disabled={deleting}  className="rounded-xl  bg-blue-50 px-4 py-2.5 text-sm font-semibold  ">
              Edit
           </button>
-
+    
           <button
             type="button"
             onClick={() => onDelete(user)}
             disabled={deleting}
-            className="rounded-xl bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-100 disabled:opacity-50">
+            className="rounded-xl bg-red px-4 py-2.5 text-sm font-semibold text-red-600 ">
           {deleting ? "Deleting..." : "Delete"}
 
                        
           </button>
         </div>
       </div>
-           <div className="h-12 bg-gradient-to-r from-blue-600 to-indigo-600" />
+           <div className="h-10 bg-blue-600" />
     </article>
   );
 }
