@@ -13,11 +13,11 @@ function App() {
     users,
     loading,
     error,
-    actionLoading,
     addUser,
     update,
     remove,
     logout,
+    onAdd,
   } = useUsers();
 
   const [edit, setEdit] = useState(null);
@@ -58,6 +58,7 @@ function App() {
     const result = await addUser(formData);
 
     if (result.success) {
+      console.log(result.data, "new user");
       setCurrentPage(1);
     }
   }
@@ -104,7 +105,7 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50">
 
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-sm backdrop-blur">
         <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
 
           <div className="flex items-center gap-3">
@@ -123,15 +124,13 @@ function App() {
             Logout
           </button>
 
-          
-
         </div>
       </header>
 
 
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
-        <Form edit={edit} onSubmit={handleSubmit} onCancel={handleCancelEdit}  actionLoading={actionLoading} />
+        <Form edit={edit} onCancel={handleCancelEdit} onSubmit={handleSubmit}     onAdd={onAdd} />
 
         <section>
 

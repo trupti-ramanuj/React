@@ -133,9 +133,8 @@ function Form({
 
   const inputClass = (field) =>
     `w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition ${
-      errors[field]
-        ? "border-red-400 bg-red-50 focus:ring-4 focus:ring-red-100"
-        : "border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+      errors[field] ? "border-red-400 bg-red-50 focus:ring-4 focus:ring-red-100"
+        : "border-slate-300 bg-white focus:border-blue-500 "
     }`;
 
   return (
@@ -147,26 +146,15 @@ function Form({
           <div className="flex items-center gap-2">
             
             <h2 className="text-xl font-bold text-slate-900">
-              {edit
-                ? "Edit"
-                : "Add"}
+              {edit? "Edit": "Add"}
             </h2>
           </div>
 
-          <p className="mt-1 text-sm text-slate-500">
-            {edit
-              ? "Update the user's information below."
-              : "Fill in the information to create a new user."}
-          </p>
+          
         </div>
 
         {edit && (
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={loading}
-            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-          >
+          <button type="button" onClick={onCancel}  disabled={loading}  className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-600transition hover:bg-slate-50">
             Cancel Edit
           </button>
         )}
@@ -181,13 +169,7 @@ function Form({
               First Name *
             </label>
 
-            <input
-              name="firstName"
-              value={form.firstName}
-              onChange={handleChange}
-              placeholder="John"
-              className={inputClass("firstName")}
-            />
+            <input name="firstName" value={form.firstName}  onChange={handleChange}  placeholder="John" className={inputClass("firstName")}/>
 
             {errors.firstName && (
               <p className="mt-1.5 text-xs font-medium text-red-600">
@@ -201,16 +183,10 @@ function Form({
               Last Name *
             </label>
 
-            <input
-              name="lastName"
-              value={form.lastName}
-              onChange={handleChange}
-              placeholder="Doe"
-              className={inputClass("lastName")}
-            />
+            <input name="lastName" value={form.lastName} onChange={handleChange}  placeholder="Doe"  className={inputClass("lastName")}/>
 
             {errors.lastName && (
-              <p className="mt-1.5 text-xs font-medium text-red-600">
+              <p className="mt-1 text-xs font-medium text-red-600">
                 {errors.lastName}
               </p>
             )}
@@ -221,13 +197,7 @@ function Form({
               Username *
             </label>
 
-            <input
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              placeholder="john_doe"
-              className={inputClass("username")}
-            />
+            <input name="username" value={form.username} onChange={handleChange} placeholder="john_doe" className={inputClass("username")}/>
 
             {errors.username && (
               <p className="mt-1.5 text-xs font-medium text-red-600">
@@ -242,14 +212,7 @@ function Form({
               Email *
             </label>
 
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="john@example.com"
-              className={inputClass("email")}
-            />
+            <input  type="email"  name="email"  value={form.email}  onChange={handleChange}  placeholder="john@example.com"  className={inputClass("email")}/>
 
             {errors.email && (
               <p className="mt-1.5 text-xs font-medium text-red-600">
@@ -268,8 +231,7 @@ function Form({
               value={form.phone}
               onChange={handleChange}
               placeholder="+1 555 123 4567"
-              className={inputClass("phone")}
-            />
+              className={inputClass("phone")}/>
 
             {errors.phone && (
               <p className="mt-1.5 text-xs font-medium text-red-600">
@@ -292,8 +254,7 @@ function Form({
               placeholder="25"
               min="1"
               max="120"
-              className={inputClass("age")}
-            />
+              className={inputClass("age")} />
 
             {errors.age && (
               <p className="mt-1.5 text-xs font-medium text-red-600">
@@ -310,8 +271,7 @@ function Form({
               type="button"
               onClick={onCancel}
               disabled={loading}
-              className="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-            >
+              className="rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
               Cancel
             </button>
           )}
@@ -319,17 +279,12 @@ function Form({
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 disabled:opacity-60"
-          >
+            className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 disabled:opacity-60">
             {loading && (
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
             )}
 
-            {loading
-              ? "Saving..."
-              : edit
-              ? "Update"
-              : "Add"}
+            {loading ? "Saving..."  : edit ? "Update"  : "Add"}
           </button>
         </div>
       </form>
