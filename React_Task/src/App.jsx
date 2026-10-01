@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
-import Form from "./Form";
-import List from "./List";
-import Login from "./Login";
+import Form from "./components/Form";
+import List from "./components/List";
+import Login from "./components/Login";
 import { useUsers } from "./hook/useUsers";
-import Pagination from "./Pagination";
+import Pagination from "./components/Pagination";
 
 const USERS_PER_PAGE = 8;
 

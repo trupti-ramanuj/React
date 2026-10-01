@@ -5,9 +5,7 @@ function Card({
   deleting,
 }) {
   const fullName =
-    `${user.firstName || ""} ${
-      user.lastName || ""
-    }`.trim();
+    `${user.firstName || ""} ${user.lastName || ""}`.trim();
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white">
