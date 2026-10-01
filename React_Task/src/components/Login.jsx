@@ -47,14 +47,16 @@ function Login() {
     if (!validate()) return;
 
     try {
-      await login(
-        form.username.trim(),
-        form.password.trim()
-      );
+      const result = await login(form.username.trim(), form.password.trim());
+       if (!result.success) {
+        window.location.reload();
+        <List/>
+    };
     } catch (error) {
       console.error("Login failed:", error);
     }
   }
+  
 
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center px-4 py-8">

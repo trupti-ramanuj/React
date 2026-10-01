@@ -34,17 +34,16 @@ function App() {
     if (!query) return users;
 
     return users.filter((user) => {
-      const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+      const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim().toLowerCase();
 
       return (
-        String(user.id).toLowerCase().includes(query) ||
-        fullName.toLowerCase().includes(query)
+        id.includes(query) ||
+        fullName.includes(query)
       );
     });
   }, [users, search]);
 
-  const totalPages = Math.max(1,Math.ceil(filteredUsers.length / USERS_PER_PAGE)
-  );
+  const totalPages = Math.max(1,Math.ceil(filteredUsers.length / USERS_PER_PAGE));
 
   const visibleUsers = useMemo(() => {
     const start = (currentPage - 1) * USERS_PER_PAGE;
@@ -78,8 +77,7 @@ function App() {
     const result = await addUser(formData);
 
     if (result.success) {
-      console.log(result.data, "new user");
-
+      
       setCurrentPage(1);
       setShowForm(false);
     }
@@ -87,7 +85,7 @@ function App() {
 
   function handleEdit(user) {
     setEdit(user);
-
+    setShowForm(true);
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -101,8 +99,7 @@ function App() {
 
   async function handleDelete(user) {
     const confirmed = window.confirm(
-      `Are you sure you want to delete ${user.firstName} ${user.lastName}?`
-    );
+      `Are you sure you want to delete ${user.firstName} ${user.lastName}?`);
 
     if (!confirmed) return;
 
@@ -118,6 +115,7 @@ function App() {
         String(edit.id) === String(user.id)
       ) {
         setEdit(null);
+        setShowForm(false);
       }
     }
   }
@@ -153,7 +151,7 @@ function App() {
           <button
             type="button"
             onClick={logout}
-            className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600">
+            className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm ">
             Logout
           </button>
         </div>

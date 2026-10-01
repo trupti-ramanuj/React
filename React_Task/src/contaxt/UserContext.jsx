@@ -29,30 +29,31 @@ const userReducer = (state, action) => {
       return {
         ...state,
         loading: true,
-        error: null,
+        LodingError: "",
       };
     case "SUCCESS":
       return {
         ...state,
+        token: action.payload.accessToken,
         loading: false,
         users: action.payload,
+        LodingError: "",
       };
     case "ERROR":
       return {
         ...state,
+        token: null,
+        currentUser: null,
         loading: false,
         error: action.payload,
       };
 
-      
-    case "LOGOUT":
+      case "LOAD_USERS":
       return {
-        ...initialState,
-        token: null,
-        currentUser: null,
+        ...state,
+        loading: true,
+        error: "",
       };
-
-      
     case "LOAD_SUCCESS":
       return {
         ...state,
@@ -81,20 +82,38 @@ const userReducer = (state, action) => {
     case "ADD":
       return {
         ...state,
+        actionLoading: false,
+        actionError: "",
         users: [...state.users, action.payload],
       };
     case "UPDATE":
       return {
         ...state,
+        actionLoading: false,
+        actionError: "",
         users: state.users.map((val) =>
-          val.id !== action.payload.id ? val : action.payload,
+          String(val.id) === String(action.payload.id) ? action.payload : val
         ),
       };
     case "DELETE":
       return {
         ...state,
-        users: state.users.filter((val) => val.id !== action.payload),
+        actionLoading: false,
+        actionError: "",
+        users: state.users.filter((val) => String(val.id) !== String(action.payload)),
       };
+
+    case "LOGOUT":
+      return {
+        ...initialState,
+        token: null,
+        currentUser: null,
+        users: [],
+        loading: false,
+        loginLoading: false,
+        loginError: "",
+      };
+
     default:
       return state;
   }
@@ -117,24 +136,20 @@ export const UserProvider = ({ children }) => {
 
       localStorage.setItem(
         "currentUser",
-        JSON.stringify({
-          id: data.id,
-          username: data.username,
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          image: data.image,
-          accessToken: data.accessToken,
-        })
+        JSON.stringify( "currentUser")
       );
 
       dispatch({
         type: "LOGIN_SUCCESS",
-        payload: data,
+        payload: {
+          ...currentUser,
+          accessToken: data.accessToken,
+        },
       });
 
-      return {   success: true };
+      return {   success: true, data};
     } catch (error) {
+      console.error("Login failed:", error);
       dispatch({
         type: "LOGIN_ERROR",
         payload: error.message || "Login failed.",
@@ -171,32 +186,34 @@ export const UserProvider = ({ children }) => {
 
       return {
         success: true,
+        data: data?.users || [],
       };
     } catch (error) {
+      console.error("Load users failed:", error);
       if (
-        error.message.includes("401") ||
-        error.message.toLowerCase().includes("unauthorized")
+        message.includes("401") ||
+        message.toLowerCase().includes("unauthorized")
       ) {
         logout();
       }
 
       dispatch({
         type: "API_ERROR",
-        payload: error.message || "Failed to load users.",
+        payload: message,
       });
 
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   }, [logout]);
 
   useEffect(() => {
-    if (state.token && state.users.length === 0) {
+    if (state.token) {
       loadUsers();
     }
-  }, [state.token, state.users.length, loadUsers]);
+  }, [state.token,  loadUsers]);
 
   const addUser = useCallback(async (user) => {
     dispatch({
