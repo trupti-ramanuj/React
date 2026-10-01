@@ -18,8 +18,7 @@ function UserList({
           onAdd={onAdd}
           deleting={
             String(deletingId) === String(user.id)
-          }
-        />
+          } />
      
       ))}
          

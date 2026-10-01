@@ -279,7 +279,7 @@ function Form({
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white">
+            className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2 text-sm font-semibold text-white">
            
 
             {loading ? "Saving..."  : edit ? "Update"  : "Add"}

@@ -107,7 +107,7 @@ function Login() {
             </label>
 
             <input type="password" name="password" value={form.password} onChange={handleChange}
-              placeholder="Enter password" className="w-full rounded-xl border px-4 py-3 text-sm outline-none"  />
+              placeholder="Enter password" className="w-full rounded-xl border px-4 py-3 text-sm outline-none" />
 
             {errors.password && (
               <p className="mt-1.5 text-xs font-medium text-red-600">
@@ -118,12 +118,10 @@ function Login() {
 
          
           <button
-            type="submit" disabled={loginLoading} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white"
-          >
+            type="submit"  className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white">
             {loginLoading && (
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-white" />
             )}
-
             {loginLoading ? "Signing in..." : "Sign In"}
           </button>
 

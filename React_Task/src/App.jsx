@@ -173,7 +173,7 @@ function App() {
 
                 <h2 className="text-2xl font-bold text-slate-900">Users</h2>
 
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-blue-700">
+                <span className="rounded-full px-3 py-1 text-xs font-bold text-blue-700">
                   {filteredUsers.length}
                 </span>
 
@@ -191,7 +191,7 @@ function App() {
               </button>
             )}
 
-       
+        
           </div>
 
           {!loading && !error && filteredUsers.length === 0 ? (
