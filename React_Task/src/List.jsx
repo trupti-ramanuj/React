@@ -1,42 +1,68 @@
-import useUsers from "./hook/useUsers";
+import Card from "./Card";
 
-const List = ({setEdit})=>{
-    const { users, loading, error, deleteUser } = useUsers();
+function UserList({
+  users,
+  loading,
+  error,
+  onEdit,
+  onDelete,
+  deletingId,
+}) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <div
+            key={index}
+            className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
+          >
+            <div className="h-20 animate-pulse bg-slate-200" />
 
-    if(loading){
-        return <h3>Loding users</h3>
-    }
-    if(error){
-        return <h3>{error}</h3>
-    }
-    if(users?.length === 0){
-        return <h3>No user</h3>
-    }
-    return(
-        <div className="h-[95%]  overflow-auto ">
-            <h2 className='text-4xl font-bold'>User List</h2>
-            <div  className=' flex flex-wrap items-start justify-start gap-2 mt-6'>
-            {users?.map((user)=>(
-                <div key={user} className=" flex justify-between flex-col items-start relative h-55 w-50 rounded-xl text-black pt-9 pb-4 px-4 bg-white">
-                <div className="w-50 h-55 border border-black  m-2 p-2" key={user?.id}>
-                    <h3 className='leading-tight text-lg font-bold'>{user?.name}</h3>
+            <div className="space-y-4 p-5">
+              <div className="h-16 w-16  rounded-2xl bg-slaate-100" />
+              <div className="h-5 w-32 rounded bg-slate-100" />
+              <div className="h-4 w-full  rounded bg-slate-100" />
+              <div className="h-4 w-4/5  rounded bg-slate-100" />
+              <div className="h-10 w-full se rounded-xl bg-slate-100" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
-                    <p className='mt-1 leading-tight text-xs font-semibold text-gray-600'>
-                        <b>Email:</b>{user?.email}
-                    </p>
-                    <p className='mt-2 leading-tight text-xs font-semibold text-gray-600'>
-                        <b>Username:</b>{user?.username}
-                    </p>
-                    <p className='mt-2 leading-tight text-xs font-semibold text-gray-600'>
-                        <b>Phone:</b>{user?.phone}
-                    </p>
+  if (error) {
+    return (
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-10 text-center">
+     
+        <h3 className="text-lg font-bold text-red-900">
+          Unable to load users
+        </h3>
 
-                    <button  className='w-full cursor-pointer active:scale-95 bg-blue-500 py-1 text-xs rounded font-bold text-white'  onClick={()=>setEdit(user)}>Edit</button>
-                    <button  className='w-full cursor-pointer active:scale-95 bg-red-500 py-1 text-xs rounded font-bold text-white' onClick={()=>deleteUser(user.id)}>Delete</button>
-                </div>
-                </div>
-            ))}</div>
-        </div>
-    )
+        <p className="mt-2 text-sm text-red-700">
+          {error}
+        </p>
+      </div>
+    );
+  }
+
+
+
+  return (
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {users.map((user) => (
+        <Card
+          key={user.id}
+          user={user}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          deleting={
+            String(deletingId) === String(user.id)
+          }
+        />
+      ))}
+    </div>
+  );
 }
-export default List
+
+export default UserList;

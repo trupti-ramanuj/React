@@ -1,11 +1,26 @@
-import { createContext,useReducer } from "react";
+
+import { createContext, useCallback, useEffect, useMemo, useReducer} from "react";
+
+import {
+  create as createApi,
+  deleteUser as deleteApi,
+  getUsers,
+  login as loginApi,
+  update as updateApi,
+} from "../api/api";
 
 export const UserContext = createContext();
 
 const initialState = {
-  users:[],
-  loading:false,
-  error:null,
+ users: [],
+  loading: false,
+  error: "",
+  token: localStorage.getItem("accessToken"),
+  currentUser: JSON.parse(localStorage.getItem("currentUser") || "null"),
+  loginLoading: false,
+  loginError: "",
+  actionLoading: false,
+  actionError: "",
 };
 
 const userReducer = (state, action) => {
@@ -28,6 +43,41 @@ const userReducer = (state, action) => {
         loading: false,
         error: action.payload,
       };
+
+      
+    case "LOGOUT":
+      return {
+        ...initialState,
+        token: null,
+        currentUser: null,
+      };
+
+      
+    case "LOAD_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        error: "",
+        users: action.payload,
+      };
+
+    case "API_ERROR":
+      return {
+        ...state,
+        loading: false,
+        actionLoading: false,
+        error: action.payload,
+        actionError: action.payload,
+      };
+
+      
+    case "ACTION_START":
+      return {
+        ...state,
+        actionLoading: true,
+        actionError: "",
+      };
+
     case "ADD":
       return {
         ...state,
@@ -53,150 +103,227 @@ const userReducer = (state, action) => {
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
 
-  const login = async (user) => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch("https://dummyjson.com/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify(user),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to Login");
-      }
-
-      const newUser = await res.json();
-
-      dispatch({
-        type: "LOADING",
-        payload: newUser,
-      });
-    } catch (error) {
-      dispatch({
-        type: "ERROR",
-        payload: error,
-      });
-    }
-  };
-
-  const getUser = async () => {
-    dispatch({ type: "LOADING" });
+ const login = useCallback(async (username, password) => {
+    dispatch({ type: "LOGIN_START" });
 
     try {
-      const token = localStorage.getItem("token");
+      const data = await loginApi(username, password);
 
-      const res = await fetch("https://dummyjson.com/users", {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      if (!res.ok) {
-        throw new Error("Failed to load users");
+      if (!data?.accessToken) {
+        throw new Error("Authentication token was not returned.");
       }
 
-      const data = await res.json();
+      localStorage.setItem("accessToken", data.accessToken);
+
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          id: data.id,
+          username: data.username,
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          image: data.image,
+          accessToken: data.accessToken,
+        })
+      );
 
       dispatch({
-        type: "SUCCESS",
-        payload: data.users,
-      });
-    } catch (error) {
-      dispatch({
-        type: "ERROR",
-        payload: error.message,
-      });
-    }
-  };
-  const add = async (user) => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch("https://dummyjson.com/users/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify(user),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to add user");
-      }
-
-      const newUser = await res.json();
-
-      dispatch({
-        type: "ADD",
-        payload: newUser,
-      });
-    } catch (error) {
-      dispatch({
-        type: "ERROR",
-        payload: error.message,
-      });
-    }
-  };
-  const update = async (id, user) => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(`https://dummyjson.com/users/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify(user),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to update user");
-      }
-      const data = await res.json();
-      dispatch({
-        type: "UPDATE",
+        type: "LOGIN_SUCCESS",
         payload: data,
       });
+
+      return {
+        success: true,
+      };
     } catch (error) {
       dispatch({
-        type: "ERROR",
-        payload: error.message,
+        type: "LOGIN_ERROR",
+        payload: error.message || "Login failed.",
       });
-    }
-  };
-  const deleteUser = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
 
-      const res = await fetch(`https://dummyjson.com/users/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
+      return {
+        success: false,
+        error: error.message || "Login failed.",
+      };
+    }
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("currentUser");
+
+    dispatch({
+      type: "LOGOUT",
+    });
+  }, []);
+
+  const loadUsers = useCallback(async () => {
+    dispatch({
+      type: "LOAD_USERS",
+    });
+
+    try {
+      const data = await getUsers();
+
+      dispatch({
+        type: "LOAD_SUCCESS",
+        payload: data.users || [],
+      });
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      if (
+        error.message.includes("401") ||
+        error.message.toLowerCase().includes("unauthorized")
+      ) {
+        logout();
+      }
+
+      dispatch({
+        type: "API_ERROR",
+        payload: error.message || "Failed to load users.",
+      });
+
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }, [logout]);
+
+  useEffect(() => {
+    if (state.token && state.users.length === 0) {
+      loadUsers();
+    }
+  }, [state.token, state.users.length, loadUsers]);
+
+  const addUser = useCallback(async (user) => {
+    dispatch({
+      type: "ACTION_START",
+    });
+
+    try {
+      const created = await createApi(user);
+
+      dispatch({
+        type: "ADD_USER",
+        payload: {
+          ...user,
+          ...created,
         },
       });
-      if (!res.ok) {
-        throw new Error("Failed to delete user");
-      }
+
+      return {
+        success: true,
+        data: created,
+      };
+    } catch (error) {
+      dispatch({
+        type: "API_ERROR",
+        payload: error.message || "Failed to create user.",
+      });
+
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }, []);
+
+
+  const update = useCallback(async (id, user) => {
+    dispatch({
+      type: "ACTION_START",
+    });
+
+    try {
+      const updated = await updateApi(id, user);
+
+      dispatch({
+        type: "UPDATE",
+        payload: {
+          ...user,
+          ...updated,
+          id,
+        },
+      });
+
+      return {
+        success: true,
+        data: updated,
+      };
+    } catch (error) {
+      dispatch({
+        type: "API_ERROR",
+        payload: error.message || "Failed to update user.",
+      });
+
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }, []);
+
+  
+  const remove = useCallback(async (id) => {
+    dispatch({
+      type: "ACTION_START",
+    });
+
+    try {
+      await deleteApi(id);
+
       dispatch({
         type: "DELETE",
         payload: id,
       });
+
+      return {
+        success: true,
+      };
     } catch (error) {
       dispatch({
-        type: "ERROR",
-        payload: error.message,
+        type: "API_ERROR",
+        payload: error.message || "Failed to delete user.",
       });
+
+      return {
+        success: false,
+        error: error.message,
+      };
     }
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      ...state,
+      login,
+      logout,
+      loadUsers,
+      addUser,
+      update,
+      remove,
+    }),
+    [
+      state,
+      login,
+      logout,
+      loadUsers,
+      addUser,
+      update,
+      remove,
+    ]
+  );
 
   return (
-    <UserContext.Provider
-      value={{ ...state, login, getUser, add, update, deleteUser }}
-    >
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );
-};
+}
+
+
