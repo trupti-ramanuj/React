@@ -25,11 +25,33 @@ const initialState = {
 
 const userReducer = (state, action) => {
   switch (action.type) {
+    case "LOGIN_START":
+      return {
+        ...state,
+        loginLoading: true,
+        loginError: "",
+      };
+    case "LOGIN_SUCCESS":
+      return {
+        ...state,
+        token: action.payload.accessToken,
+        currentUser: action.payload.currentUser,
+        loginLoading: false,
+        loginError: "",
+      };
+    case "LOGIN_ERROR":
+      return {
+        ...state,
+        token: null,
+        currentUser: null,
+        loginLoading: false,
+        loginError: action.payload,
+      };
     case "LOADING":
       return {
         ...state,
         loading: true,
-        LodingError: "",
+        error: "",
       };
     case "SUCCESS":
       return {
@@ -37,7 +59,7 @@ const userReducer = (state, action) => {
         token: action.payload.accessToken,
         loading: false,
         users: action.payload,
-        LodingError: "",
+        error: "",
       };
     case "ERROR":
       return {
@@ -48,7 +70,7 @@ const userReducer = (state, action) => {
         error: action.payload,
       };
 
-      case "LOAD_USERS":
+    case "LOAD_USERS":
       return {
         ...state,
         loading: true,
@@ -71,7 +93,6 @@ const userReducer = (state, action) => {
         actionError: action.payload,
       };
 
-      
     case "ACTION_START":
       return {
         ...state,
@@ -122,7 +143,7 @@ const userReducer = (state, action) => {
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
 
- const login = useCallback(async (username, password) => {
+  const login = useCallback(async (username, password) => {
     dispatch({ type: "LOGIN_START" });
 
     try {
@@ -132,32 +153,34 @@ export const UserProvider = ({ children }) => {
         throw new Error("Authentication token was not returned.");
       }
 
-      localStorage.setItem("accessToken", data.accessToken);
+      const currentUser = {
+        username,
+      };
 
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify( "currentUser")
-      );
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: {
-          ...currentUser,
+          currentUser,
           accessToken: data.accessToken,
         },
       });
 
-      return {   success: true, data};
+      return { success: true, data };
     } catch (error) {
       console.error("Login failed:", error);
+      const errorMessage = error?.message || "Login failed.";
+
       dispatch({
         type: "LOGIN_ERROR",
-        payload: error.message || "Login failed.",
+        payload: errorMessage,
       });
 
       return {
         success: false,
-        error: error.message || "Login failed.",
+        error: errorMessage,
       };
     }
   }, []);
@@ -190,6 +213,8 @@ export const UserProvider = ({ children }) => {
       };
     } catch (error) {
       console.error("Load users failed:", error);
+      const message = error?.message || "Failed to load users.";
+
       if (
         message.includes("401") ||
         message.toLowerCase().includes("unauthorized")

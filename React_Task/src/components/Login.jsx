@@ -48,10 +48,10 @@ function Login() {
 
     try {
       const result = await login(form.username.trim(), form.password.trim());
-       if (!result.success) {
-        window.location.reload();
-        <List/>
-    };
+
+      if (!result.success) {
+        return;
+      }
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -120,9 +120,12 @@ function Login() {
 
          
           <button
-            type="submit"  className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white">
+            type="submit"
+            disabled={loginLoading}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+          >
             {loginLoading && (
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-white" />
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
             )}
             {loginLoading ? "Signing in..." : "Sign In"}
           </button>

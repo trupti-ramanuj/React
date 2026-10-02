@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Form from "./components/Form";
 import List from "./components/List";
 import Login from "./components/Login";
@@ -34,28 +34,21 @@ function App() {
     if (!query) return users;
 
     return users.filter((user) => {
+      const userId = String(user.id ?? "").toLowerCase();
       const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim().toLowerCase();
 
-      return (
-        id.includes(query) ||
-        fullName.includes(query)
-      );
+      return userId.includes(query) || fullName.includes(query);
     });
   }, [users, search]);
 
-  const totalPages = Math.max(1,Math.ceil(filteredUsers.length / USERS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / USERS_PER_PAGE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
 
   const visibleUsers = useMemo(() => {
-    const start = (currentPage - 1) * USERS_PER_PAGE;
+    const start = (safeCurrentPage - 1) * USERS_PER_PAGE;
 
     return filteredUsers.slice(start, start + USERS_PER_PAGE);
-  }, [filteredUsers, currentPage]);
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  }, [filteredUsers, safeCurrentPage]);
 
   async function handleSubmit(formData) {
     if (edit) {
@@ -196,7 +189,7 @@ function App() {
             <p className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
               {users.length === 0
                 ? "No users found."
-                : "No users match y"}
+                : "No users match your search."}
             </p>
           ) : (
             <List
@@ -213,9 +206,9 @@ function App() {
             !error &&
             users.length > 0 && (
               <Pagination
-                currentPage={currentPage}
+                currentPage={safeCurrentPage}
                 totalPages={totalPages}
-                onPageChange={setCurrentPage}
+                onPageChange={(page) => setCurrentPage(Math.min(Math.max(1, page), totalPages))}
               />
             )}
 
